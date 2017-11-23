@@ -14,7 +14,7 @@ def big5_to_utf8():
 
 
 def read(file):
-    with open(file, 'r', encoding = 'big5', errors='ignore') as f:
+    with open(file, 'r', encoding='big5', errors='ignore') as f:
         for line in f:
             yield line
 
