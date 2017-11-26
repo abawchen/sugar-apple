@@ -1,7 +1,12 @@
-# https://stackoverflow.com/questions/16981921/relative-imports-in-python-3
+# -*- coding: utf-8 -*-
+
+import click
+
 from .apple import Apple
 
+
 def cli():
+    """Creates and calls Haxor."""
     try:
         apple = Apple()
         apple.run_cli()

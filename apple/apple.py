@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import subprocess
 import sys
 
 import click
@@ -13,17 +14,17 @@ from prompt_toolkit.history import FileHistory, InMemoryHistory
 from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
 
 from . import __version__
-from .client import AppleClient
 from .completer import Completer
-from .formatter import format_data
+from .utils import TextUtils
 
 
 class Apple(object):
 
     def __init__(self):
-        self.completer = Completer(['apple'])
+        self.text_utils = TextUtils()
+        self.completer = Completer(fuzzy_match=False,
+                                   text_utils=self.text_utils)
         self.cli = self._create_cli()
-        self.handler = AppleClient()
 
     def _create_cli(self):
         # history = FileHistory(os.path.expanduser('~/applehistory'))
@@ -69,19 +70,19 @@ class Apple(object):
         :param document: An instance of `prompt_toolkit.document.Document`.
         """
         try:
-            self.handler.handle(document.text)
-            if self.handler.output is not None:
-                # click.echo(self.handler.output)
-                lines = format_data(
-                    self.handler.command,
-                    self.handler.output)
-                click.echo('\n'.join(lines))
+            # self.handler.handle(document.text)
+            # if self.handler.output is not None:
+            #     # click.echo(self.handler.output)
+            #     lines = format_data(
+            #         self.handler.command,
+            #         self.handler.output)
+            #     click.echo('\n'.join(lines))
             # print('You entered:', document.text)
             # click.secho(document.text);
             # if self.paginate_comments:
             #     text = document.text
             #     text = self._add_comment_pagination(text)
-            # subprocess.call(text, shell=True)
+            subprocess.call(document.text, shell=True)
         except Exception as e:
             click.secho(e, fg='red')
 
