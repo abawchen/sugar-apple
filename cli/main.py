@@ -1,5 +1,5 @@
 # https://stackoverflow.com/questions/16981921/relative-imports-in-python-3
-from apple import Apple
+from .apple import Apple
 
 def cli():
     try:

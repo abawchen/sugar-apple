@@ -12,15 +12,18 @@ from prompt_toolkit.shortcuts import create_default_layout, create_eventloop
 from prompt_toolkit.history import FileHistory, InMemoryHistory
 from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
 
-from __init__ import __version__
-from completer import Completer
+from . import __version__
+from .client import AppleClient
+from .completer import Completer
+from .formatter import format_data
 
 
 class Apple(object):
 
     def __init__(self):
         self.completer = Completer(['apple'])
-        self._create_cli()
+        self.cli = self._create_cli()
+        self.handler = AppleClient()
 
     def _create_cli(self):
         # history = FileHistory(os.path.expanduser('~/applehistory'))
@@ -48,7 +51,7 @@ class Apple(object):
             on_abort=AbortAction.RETRY,
             ignore_case=True)
         eventloop = create_eventloop()
-        self.cli = CommandLineInterface(
+        return CommandLineInterface(
             application=application,
             eventloop=eventloop)
 
@@ -66,7 +69,15 @@ class Apple(object):
         :param document: An instance of `prompt_toolkit.document.Document`.
         """
         try:
-            print('You entered:', document.text)
+            self.handler.handle(document.text)
+            if self.handler.output is not None:
+                # click.echo(self.handler.output)
+                lines = format_data(
+                    self.handler.command,
+                    self.handler.output)
+                click.echo('\n'.join(lines))
+            # print('You entered:', document.text)
+            # click.secho(document.text);
             # if self.paginate_comments:
             #     text = document.text
             #     text = self._add_comment_pagination(text)
