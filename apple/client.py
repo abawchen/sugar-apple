@@ -11,6 +11,7 @@ import zipfile
 from tqdm import tqdm
 
 from .db import initdb, persist
+from .file import normalize, read
 
 class AppleClient(object):
     """docstring for AppleClient"""
@@ -57,12 +58,6 @@ class AppleClient(object):
     @click.argument('format', default='TXT')
     @click.argument('path', default='./data/lvr_landtxt')
     def transcode(format, path):
-
-        def read(file):
-            with open(file, 'r', encoding='big5', errors='ignore') as f:
-                for line in f:
-                    yield line
-
         # Create folder for utf-8 files
         utf8_path = path + '_utf8'
         pathlib.Path(utf8_path).mkdir(parents=True, exist_ok=True)
@@ -71,11 +66,29 @@ class AppleClient(object):
         for input in glob.glob(os.path.join(path, '*.' + format)):
             output = os.path.join(utf8_path, os.path.basename(input))
             with open(output, 'w') as f:
-                for line in read(input):
+                for line in read(input, encoding='big5'):
                     f.write(line)
 
         # TODO: More clear message
         click.echo('Transcoded')
+
+    @cli.command()
+    @click.argument('format', default='TXT')
+    @click.argument('path', default='./data/lvr_landtxt_utf8')
+    def normalize(format, path):
+        normalize_path = path + '_normalize'
+        print(normalize_path);
+        pathlib.Path(normalize_path).mkdir(parents=True, exist_ok=True)
+
+        # Begin to transcode from big5 to utf-8
+        for input in glob.glob(os.path.join(path, '*.' + format)):
+            output = os.path.join(normalize_path, os.path.basename(input))
+            with open(output, 'w') as f:
+                for line in normalize(input):
+                    f.write(line)
+
+        # TODO: More clear message
+        click.echo('Normalized')
 
     @cli.command()
     @click.argument('format', default='TXT')
