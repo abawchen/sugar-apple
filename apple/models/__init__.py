@@ -1,3 +1,3 @@
 from .meta import DBSession
-from .foo import Foo
+from .city import City
 from .record import Record

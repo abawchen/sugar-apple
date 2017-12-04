@@ -2,17 +2,10 @@
 
 import os
 import glob
+import pandas as pd
 
-from sqlalchemy import create_engine
+from .models.meta import engine
 
-from .models.meta import Base
-
-
-def initdb():
-    engine = create_engine('mysql://root:54883155@127.0.0.1:3306/sugar-apple', echo=False)
-    Base.metadata.create_all(bind=engine)
-
-def persist(format, path):
-    files = glob.glob(os.path.join(path, '*.' + format))
-    for input in files:
-        print(input)
+def persist(data, tablename, columns):
+    df = pd.DataFrame(data, columns=columns)
+    df.to_sql(name=tablename, con=engine, if_exists='replace', index=False)

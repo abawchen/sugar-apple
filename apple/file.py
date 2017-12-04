@@ -14,7 +14,7 @@ def normalize(file, encoding='utf8', errors='ignore'):
             line = reduce(lambda s, kv: s.replace(*kv), repls, line)
             yield line
 
-def read(file, encoding='utf8', errors='ignore'):
+def readline(file, encoding='utf8', errors='ignore'):
     with open(file, 'r', encoding=encoding, errors=errors) as f:
         for line in f:
             yield line
