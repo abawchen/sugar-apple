@@ -1,4 +1,4 @@
-from .meta import Base
+from . import Base
 from sqlalchemy import Boolean, Column, DateTime, String, Integer, Numeric, Float, ForeignKey, func
 
 class Record(Base):
