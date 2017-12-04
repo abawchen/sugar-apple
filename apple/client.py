@@ -11,8 +11,9 @@ import zipfile
 from glob import glob
 from tqdm import tqdm
 
-from .db import persist
+from . import db
 from .file import normalize, readline
+from .models import City, Record
 
 class AppleClient(object):
     """docstring for AppleClient"""
@@ -96,10 +97,26 @@ class AppleClient(object):
 
     @cli.command()
     @click.argument('format', default='TXT')
-    @click.argument('path', default='./data/lvr_landtxt_utf8')
+    @click.argument('path', default='./data/lvr_landtxt_utf8_normalize')
     def persist(format, path):
-        # https://stackoverflow.com/a/2692751/9041712
+        db.init()
         city_file = glob(os.path.join(path, '[0-9]' * 8 + '.' + format))
         with open(city_file[0], 'r') as f:
-            city_mapping = [s.split(',') for s in re.findall("[A-Z],.*", f.read())]
-        persist(city_mapping, 'city', ['city_code', 'city_name'])
+            city_mapping = [s.split(',') for s in re.findall('[A-Z],.*', f.read())]
+        db.persist(City, city_mapping, 'replace')
+
+        # Persist record to db
+        record_files = glob(os.path.join(path, '[A-Z]*[ABC].TXT'))
+        pbar = tqdm(record_files)
+        for filename in pbar:
+            trading_type = re.match('.*([ABC]).TXT', filename).group(1)
+            city_code = re.match('.*/([A-Z])', filename).group(1)
+            city_name = next((name for (code, name) in city_mapping if code == city_code), None)
+            meta = [trading_type, city_code, city_name, "0", "0", ]
+            with open(filename, 'r') as f:
+                data = f.readlines()
+                data = [data[0]] + [",".join(meta + [line]) for line in data[1:]]
+                # TODO: Grep error data
+                data = [d.split(',') for d in data[1:] if d.count(',') == 32]
+                db.persist(Record, data, 'append')
+                pbar.set_description("Processing %s" % filename)
