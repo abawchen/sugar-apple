@@ -1,8 +1,13 @@
+# -*- coding: utf-8 -*-
+# https://stackoverflow.com/a/45613994/9041712
+
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-engine = create_engine('mysql+mysqldb://root:54883155@127.0.0.1:3306/sugar-apple', echo=False)
+from ..instance.config import SQLALCHEMY_DATABASE_URI
+
+engine = create_engine(SQLALCHEMY_DATABASE_URI, echo=False)
 
 Base = declarative_base()
 # Base.metadata.create_all(engine)

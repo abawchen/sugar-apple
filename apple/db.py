@@ -4,8 +4,7 @@ import pandas as pd
 
 from sqlalchemy import MetaData
 
-from .models.meta import Base, engine
-from .models import City, Record
+from .models import engine, Base, City, Record
 
 
 def init():
