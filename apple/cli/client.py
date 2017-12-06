@@ -96,14 +96,18 @@ class AppleClient(object):
         click.echo('Normalized')
 
     @cli.command()
+    def initdb():
+        db.init()
+
+    @cli.command()
     @click.argument('format', default='TXT')
     @click.argument('path', default='./data/lvr_landtxt_utf8_normalize')
     def persist(format, path):
-        db.init()
         city_file = glob(os.path.join(path, '[0-9]' * 8 + '.' + format))
         with open(city_file[0], 'r') as f:
             city_mapping = [s.split(',') for s in re.findall('[A-Z],.*', f.read())]
         db.persist(City, city_mapping, 'replace')
+        db.add_primary_key(City)
 
         # Persist record to db
         record_files = glob(os.path.join(path, '[A-Z]*[ABC].TXT'))
@@ -120,3 +124,4 @@ class AppleClient(object):
                 data = [d.split(',') for d in data[1:] if d.count(',') == 32]
                 db.persist(Record, data, 'append')
                 pbar.set_description("Processing %s" % filename)
+        db.add_primary_key(Record)
