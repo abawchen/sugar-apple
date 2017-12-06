@@ -11,7 +11,7 @@ setup(
     ],
     entry_points='''
         [console_scripts]
-        sugar-apple = apple.main:cli
-        apple = apple.main_cli:cli
+        sugar-apple = apple.cli.main:cli
+        apple = apple.cli.main_cli:cli
     ''',
 )

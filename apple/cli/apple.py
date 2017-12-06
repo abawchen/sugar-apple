@@ -13,9 +13,9 @@ from prompt_toolkit.shortcuts import create_default_layout, create_eventloop
 from prompt_toolkit.history import FileHistory, InMemoryHistory
 from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
 
-from . import __version__
 from .completer import Completer
-from .utils import TextUtils
+from .. import __version__
+from ..utils import TextUtils
 
 
 class Apple(object):
