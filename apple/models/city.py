@@ -1,5 +1,5 @@
-from .meta import Base
-from sqlalchemy import Boolean, Column, DateTime, String, Integer, Numeric, ForeignKey, func
+from . import Base
+from sqlalchemy import Column, DateTime, String, Integer
 
 class City(Base):
     __tablename__ = 'city'
