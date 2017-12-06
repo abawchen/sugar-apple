@@ -11,9 +11,9 @@ import zipfile
 from glob import glob
 from tqdm import tqdm
 
-from . import db
-from .file import normalize, readline
-from .models import City, Record
+from .. import db
+from ..file import normalize, readline
+from ..models import City, Record
 
 class AppleClient(object):
     """docstring for AppleClient"""
