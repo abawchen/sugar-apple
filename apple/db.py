@@ -2,9 +2,16 @@
 
 import pandas as pd
 
-from sqlalchemy import MetaData
+from sqlalchemy import create_engine, MetaData
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
 
-from .models import engine, Base, City, Record
+from .instance.config import SQLALCHEMY_DATABASE_URI
+
+engine = create_engine(SQLALCHEMY_DATABASE_URI, echo=False)
+Base = declarative_base()
+DBSession = sessionmaker(bind=engine)
+session = DBSession()
 
 
 def init():

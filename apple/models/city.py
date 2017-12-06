@@ -1,4 +1,4 @@
-from . import Base
+from ..db import Base
 from sqlalchemy import Column, DateTime, String, Integer
 
 class City(Base):
