@@ -21,13 +21,19 @@ class RecordType(SQLAlchemyObjectType):
 class Query(graphene.ObjectType):
 
     node = graphene.relay.Node.Field()
-
-    record = graphene.Field(RecordType, id = graphene.Int())
-    all_records = SQLAlchemyConnectionField(RecordType)
+    record = graphene.Field(RecordType, id=graphene.Int())
+    records = graphene.List(RecordType, city_name=graphene.String())
+    # all_records = SQLAlchemyConnectionField(RecordType)
 
     def resolve_record(self, info, **args):
         id = args.get('id')
+        return RecordType.get_query(info).get(id)
+
+    def resolve_records(self, info, **args):
         query = RecordType.get_query(info)
-        return query.get(id)
+        if 'city_name' in args:
+            print(args.get('city_name'))
+            return query.filter(Record.city_name == args.get('city_name'))
+        return query.all()
 
 schema = graphene.Schema(query=Query, types=[RecordType])
