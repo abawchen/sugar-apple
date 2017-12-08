@@ -24,6 +24,8 @@ class Query(graphene.ObjectType):
     record = graphene.Field(RecordType, id=graphene.Int())
     records = graphene.List(
         RecordType,
+        limit=graphene.Int(),
+        offset=graphene.Int(),
         city_name=graphene.String(),
         area=graphene.String()
     )
@@ -34,7 +36,16 @@ class Query(graphene.ObjectType):
         return RecordType.get_query(info).get(id)
 
     def resolve_records(self, info, **args):
-        query = RecordType.get_query(info)
-        return query.filter_by(**args)
+        limit = args.pop('limit', 0)
+        offset = args.pop('offset', 0)
+        query = RecordType.get_query(info).filter_by(**args)
+        # TODO: Refactor
+        if limit:
+            query = query.limit(limit)
+        if offset:
+            query = query.offset(offset)
+        # TODO: Debug purpose:
+        # print(query.statement.compile(compile_kwargs={"literal_binds": True}))
+        return query
 
 schema = graphene.Schema(query=Query, types=[RecordType])
