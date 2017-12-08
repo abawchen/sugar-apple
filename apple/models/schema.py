@@ -22,7 +22,11 @@ class Query(graphene.ObjectType):
 
     node = graphene.relay.Node.Field()
     record = graphene.Field(RecordType, id=graphene.Int())
-    records = graphene.List(RecordType, city_name=graphene.String())
+    records = graphene.List(
+        RecordType,
+        city_name=graphene.String(),
+        area=graphene.String()
+    )
     # all_records = SQLAlchemyConnectionField(RecordType)
 
     def resolve_record(self, info, **args):
@@ -31,9 +35,6 @@ class Query(graphene.ObjectType):
 
     def resolve_records(self, info, **args):
         query = RecordType.get_query(info)
-        if 'city_name' in args:
-            print(args.get('city_name'))
-            return query.filter(Record.city_name == args.get('city_name'))
-        return query.all()
+        return query.filter_by(**args)
 
 schema = graphene.Schema(query=Query, types=[RecordType])
