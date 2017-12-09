@@ -1,0 +1,8 @@
+{
+  "name": "sugar-apple",
+  "version": "0.0.1",
+  "main": "index.js",
+  "repository": "https://github.com/abawchen/sugar-apple.git",
+  "author": "Jeremy Lin",
+  "license": "MIT"
+}
