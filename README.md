@@ -1,5 +1,15 @@
 ## Sugar-Apple
 
+這是一個從[政府資料開放平臺](https://data.gov.tw/)抓取[不動產買賣實價登錄批次資料](https://data.gov.tw/dataset/6213)的專案，可將下載資料轉檔進資料庫。將持續開發以下功能：
+
+- Backend
+    - [ ] Data query api by graphQL
+    - [ ] Integrate with more meta / real estate data
+    - [ ] Find out the bargaining space
+- Frontend(Web)
+    - [ ] Friendly ui query
+    - [ ] Data visualization
+
 ### apple (backend)
 
 On the terminal, create a new virtual python environment by [virtualenvwrapper](https://virtualenvwrapper.readthedocs.io/en/latest/):
