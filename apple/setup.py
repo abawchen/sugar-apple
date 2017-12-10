@@ -1,9 +1,9 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
     name='sugar-apple',
-    version='0.1',
-    # packages=find_packages(),
+    version='0.1.0',
+    packages=find_packages(),
     include_package_data=True,
     py_modules=['sugar-apple'],
     install_requires=[
@@ -11,7 +11,7 @@ setup(
     ],
     entry_points='''
         [console_scripts]
-        sugar-apple = apple.cli.main:cli
-        apple = apple.cli.main_cli:cli
+        sugar-apple = app.cli.main:cli
+        apple = app.cli.main_cli:cli
     ''',
 )

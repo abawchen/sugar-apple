@@ -8,7 +8,7 @@ from .models.schema import schema
 
 # https://spacewander.github.io/explore-flask-zh/5-configuration.html
 app = Flask(__name__, instance_relative_config=False)
-app.config.from_object('apple.config')
+app.config.from_object('app.config')
 app.config.from_pyfile('instance/config.py')
 # app.config.from_envvar('APP_CONFIG_FILE')
 

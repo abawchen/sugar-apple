@@ -70,18 +70,6 @@ class Apple(object):
         :param document: An instance of `prompt_toolkit.document.Document`.
         """
         try:
-            # self.handler.handle(document.text)
-            # if self.handler.output is not None:
-            #     # click.echo(self.handler.output)
-            #     lines = format_data(
-            #         self.handler.command,
-            #         self.handler.output)
-            #     click.echo('\n'.join(lines))
-            # print('You entered:', document.text)
-            # click.secho(document.text);
-            # if self.paginate_comments:
-            #     text = document.text
-            #     text = self._add_comment_pagination(text)
             subprocess.call(document.text, shell=True)
         except Exception as e:
             click.secho(e, fg='red')
