@@ -1,5 +1,6 @@
 var webpack = require('webpack');
 var path = require('path');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 var NODE_ENV = process.env.NODE_ENV;
 var cfg;
@@ -34,6 +35,11 @@ var config = {
   },
   plugins: [
     new webpack.EnvironmentPlugin(['NODE_ENV']),
+    new HtmlWebpackPlugin({
+      hash: true,
+      filename: 'index.html',
+      template: './src/index.html',
+    }),
   ],
 };
 
