@@ -12,12 +12,10 @@ from glob import glob
 from tqdm import tqdm
 
 from .. import db
-from ..config import BASE_DIR
+from ..config import DATA_DIR
 from ..file import normalize, readline
 from ..models import City, Record
 
-default_data_path = os.path.join(BASE_DIR, 'data')
-print(default_data_path)
 
 class AppleClient(object):
     """docstring for AppleClient"""
@@ -29,7 +27,7 @@ class AppleClient(object):
 
     @cli.command()
     @click.argument('format', default='txt')
-    @click.argument('path', default=default_data_path)
+    @click.argument('path', default=DATA_DIR)
     def download(format, path):
         # TODO: Replace hardcode
         mapping = {
@@ -55,7 +53,7 @@ class AppleClient(object):
         click.echo('Downloaded: ' + path)
 
     @cli.command()
-    @click.argument('path', default=os.path.join(default_data_path, 'lvr_landtxt.zip'))
+    @click.argument('path', default=os.path.join(DATA_DIR, 'lvr_landtxt.zip'))
     def unzip(path):
         with zipfile.ZipFile(path, 'r') as zip:
             zip.extractall(os.path.splitext(path)[0])
@@ -65,7 +63,7 @@ class AppleClient(object):
 
     @cli.command()
     @click.argument('format', default='TXT')
-    @click.argument('path', default='./data/lvr_landtxt')
+    @click.argument('path', default=os.path.join(DATA_DIR, 'lvr_landtxt'))
     def transcode(format, path):
         # Create folder for utf-8 files
         utf8_path = path + '_utf8'
@@ -83,7 +81,7 @@ class AppleClient(object):
 
     @cli.command()
     @click.argument('format', default='TXT')
-    @click.argument('path', default='./data/lvr_landtxt_utf8')
+    @click.argument('path', default=os.path.join(DATA_DIR, 'lvr_landtxt_utf8'))
     def normalize(format, path):
         normalize_path = path + '_normalize'
         print(normalize_path);
@@ -105,7 +103,7 @@ class AppleClient(object):
 
     @cli.command()
     @click.argument('format', default='TXT')
-    @click.argument('path', default='./data/lvr_landtxt_utf8_normalize')
+    @click.argument('path', default=os.path.join(DATA_DIR, 'lvr_landtxt_utf8_normalize'))
     def persist(format, path):
         city_file = glob(os.path.join(path, '[0-9]' * 8 + '.' + format))
         with open(city_file[0], 'r') as f:
