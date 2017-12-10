@@ -1,6 +1,11 @@
 {
   "name": "sugar-apple",
   "version": "0.0.1",
+  "scripts": {
+    "build": "cross-env NODE_ENV=production webpack -p",
+    "build:dev": "cross-env NODE_ENV=development webpack -d",
+    "start": "cross-env NODE_ENV=development webpack-dev-server -d --inline --hot"
+  },
   "main": "index.js",
   "repository": "https://github.com/abawchen/sugar-apple.git",
   "author": "Jeremy Lin",
