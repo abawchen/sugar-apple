@@ -6,6 +6,7 @@ import os
 import pathlib
 import re
 import requests
+import subprocess
 import zipfile
 
 from glob import glob
@@ -20,10 +21,15 @@ from ..models import City, Record
 class AppleClient(object):
     """docstring for AppleClient"""
 
-    @click.group()
+    @click.group(chain=True)
     @click.pass_context
     def cli(ctx):
         pass
+
+    # @cli.resultcallback()
+    # def process_pipeline(processors):
+    #     for processor in processors:
+    #         iterator = processor(iterator)
 
     @cli.command()
     @click.argument('format', default='txt')
@@ -84,7 +90,6 @@ class AppleClient(object):
     @click.argument('path', default=os.path.join(DATA_DIR, 'lvr_landtxt_utf8'))
     def normalize(format, path):
         normalize_path = path + '_normalize'
-        print(normalize_path);
         pathlib.Path(normalize_path).mkdir(parents=True, exist_ok=True)
 
         # Begin to transcode from big5 to utf-8
@@ -127,3 +132,8 @@ class AppleClient(object):
                 db.persist(Record, data, 'append')
                 pbar.set_description("Processing %s" % filename)
         db.add_primary_key(Record)
+
+    @cli.command()
+    def startserver():
+        cmd = 'export FLASK_APP=app/app.py && flask run -p 5001'
+        subprocess.call(cmd, shell=True)

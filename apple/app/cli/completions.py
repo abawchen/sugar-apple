@@ -6,6 +6,7 @@ SUBCOMMANDS = {
     'transcode': 'Transcode big5 to utf-8',
     'normalize': 'Normalize',
     'persist': 'Persist data to the database',
+    'startserver': 'Start flask server'
 }
 
 ARGS_OPTS_LOOKUP = {}
