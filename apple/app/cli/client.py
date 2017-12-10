@@ -12,8 +12,12 @@ from glob import glob
 from tqdm import tqdm
 
 from .. import db
+from ..config import BASE_DIR
 from ..file import normalize, readline
 from ..models import City, Record
+
+default_data_path = os.path.join(BASE_DIR, 'data')
+print(default_data_path)
 
 class AppleClient(object):
     """docstring for AppleClient"""
@@ -25,7 +29,7 @@ class AppleClient(object):
 
     @cli.command()
     @click.argument('format', default='txt')
-    @click.argument('path', default='data')
+    @click.argument('path', default=default_data_path)
     def download(format, path):
         # TODO: Replace hardcode
         mapping = {
@@ -51,7 +55,7 @@ class AppleClient(object):
         click.echo('Downloaded: ' + path)
 
     @cli.command()
-    @click.argument('path', default='./data/lvr_landtxt.zip')
+    @click.argument('path', default=os.path.join(default_data_path, 'lvr_landtxt.zip'))
     def unzip(path):
         with zipfile.ZipFile(path, 'r') as zip:
             zip.extractall(os.path.splitext(path)[0])
