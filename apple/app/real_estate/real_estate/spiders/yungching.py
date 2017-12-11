@@ -44,8 +44,7 @@ class YungchingSpider(scrapy.Spider):
             detail = record.css('ul.item-info-detail')
             details = [v.strip() for v in detail.css('li::text').extract()]
             # XXX: Take care bad data.
-            if len(details) < 9:
-                details += [''] * (9 - len(details))
+            details += [''] * max(0 ,(9 - len(details)))
             item['category'], item['age'], item['floor'], \
             item['land_ping'], item['main_ping'], item['building_ping'], \
             item['layout'], item['added_layout'], item['parking_lot'] = \
@@ -54,10 +53,13 @@ class YungchingSpider(scrapy.Spider):
 
         # Notes: Take care paging.
         active = response.css('li.is-active')
-        page_no = int(re.findall('pg=(\d+)', response.url)[0])
-        disabled = response.css('li.disabled')
-        if disabled and disabled.css('a::text').extract_first() == '下一頁 >':
-            return
+        try:
+            page_no = int(re.findall('pg=(\d+)', response.url)[0])
+            disabled = response.css('li.disabled')
+            if disabled and disabled.css('a::text').extract_first() == '下一頁 >':
+                return
 
-        next_page_url = re.sub('pg=(\d+)', 'pg=' + str(page_no + 1), response.url)
-        yield scrapy.Request(url=next_page_url)
+            next_page_url = re.sub('pg=(\d+)', 'pg=' + str(page_no + 1), response.url)
+            yield scrapy.Request(url=next_page_url)
+        except Exception as e:
+            pass
