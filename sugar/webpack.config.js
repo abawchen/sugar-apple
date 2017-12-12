@@ -18,7 +18,10 @@ var appName = 'sugar-apple';
 var appScriptDir = 'scripts';
 
 var config = {
-  entry: ['./src'],
+  entry: [
+    'babel-polyfill',
+    './src',
+  ],
   output: {
     path: path.join(__dirname, cfg.dist),
     publicPath: cfg.publicPath,
