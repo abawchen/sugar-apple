@@ -53,6 +53,38 @@ $ export FLASK_APP=app/app.py && flask run -p 5001
 
 Then you can visit `http://127.0.0.1:5001/graphql` to test graphql
 
+### sugar (frontend)
+
+Install dependencies:
+```bash
+$ cd sugar
+$ yarn
+```
+
+Configure Webpack:
+```bash
+# for development
+$ cp webpack.config.example.js webpack.config.dev.js
+
+# for production
+$ cp webpack.config.example.js webpack.config.prod.js
+```
+
+Output bundle:
+```bash
+# for development
+$ npm run build:dev
+
+# for production
+$ npm run build
+```
+
+Start dev server:
+```bash
+$ npm start
+```
+Now the client app is running at `http://{webpackDevServerHost}:{webpackdevServerPort}`
+
 ---
 
 *Happy Coding!*
