@@ -5,8 +5,13 @@
  */
 
 var cfg = {
+  // Path to place output files
   dist: './dist',
-  publicPath: '/',
+  
+  // Url to reference output files
+  publicPath: '',
+
+  // Host address and port number for Webpack dev server
   webpackDevServerHost: '0.0.0.0',
   webpackDevServerPort: 3001,
 };
