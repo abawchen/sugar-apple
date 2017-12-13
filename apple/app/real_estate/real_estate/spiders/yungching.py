@@ -24,8 +24,8 @@ class YungchingSpider(scrapy.Spider):
         ]
         # XXX: Yungching does not have '連江縣'
         cities.remove('連江縣')
-        for city_name in cities:
-            url = self.root_url + city_name + '_c/?pg=1'
+        for city in cities:
+            url = self.root_url + city + '_c/?pg=1'
             yield scrapy.Request(url=url)
 
     def parse(self, response):
@@ -54,12 +54,12 @@ class YungchingSpider(scrapy.Spider):
         # Notes: Take care paging.
         active = response.css('li.is-active')
         try:
-            page_no = int(re.findall('pg=(\d+)', response.url)[0])
+            current_page = int(re.findall('pg=(\d+)', response.url)[0])
             disabled = response.css('li.disabled')
             if disabled and disabled.css('a::text').extract_first() == '下一頁 >':
                 return
 
-            next_page_url = re.sub('pg=(\d+)', 'pg=' + str(page_no + 1), response.url)
+            next_page_url = re.sub('pg=(\d+)', 'pg=' + str(current_page + 1), response.url)
             yield scrapy.Request(url=next_page_url)
         except Exception as e:
             pass
