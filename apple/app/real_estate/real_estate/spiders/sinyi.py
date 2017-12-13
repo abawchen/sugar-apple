@@ -2,6 +2,7 @@
 
 import scrapy
 import re
+import logging
 
 from real_estate.items import RealEstateItem
 
@@ -13,14 +14,16 @@ class SinyiSpider(scrapy.Spider):
     def start_requests(self):
         # XXX: Hardcode here.
         cities = [
-            'Taipei-city', 'NewTaipei-city', 'Taoyuan-city',
-            'Hsinchu-city', 'Hsinchu-county', 'Keelung-city',
-            'Taichung-city', 'Changhua-county', 'Miaoli-county',
-            'Nantou-county', 'Yunlin-county',
-            'Kaoshiung-city', 'Tainan-city', 'Chiayi-city',
-            'Chiayi-county', 'Pingtung-county',
-            'Yilan-county', 'Hualien-city', 'Taitung-county',
-            'Penghu-county', 'Kinmen-county'
+            # 'Taipei-city', 'NewTaipei-city', 'Taoyuan-city',
+            # 'Hsinchu-city', 'Hsinchu-county', 'Keelung-city',
+            # 'Taichung-city', 'Changhua-county', 'Miaoli-county',
+            # 'Nantou-county', 'Yunlin-county',
+            # 'Kaoshiung-city', 'Tainan-city', 'Chiayi-city',
+            # 'Chiayi-county', 'Pingtung-county',
+            # 'Yilan-county', 'Hualien-city', 'Taitung-county',
+            # 'Penghu-county', 'Kinmen-county'
+            'Taichung-city'
+            # 'Kaoshiung-city'
             # 'Kinmen-county'
             # 'NewTaipei-city'
             # 'Pingtung-county'
@@ -28,45 +31,52 @@ class SinyiSpider(scrapy.Spider):
         for city in cities:
             url = self.root_url + city + '/1.html'
             yield scrapy.Request(url=url, dont_filter = True)
+        # url = 'http://buy.sinyi.com.tw/list/Changhua-county/3.html'
+        # yield scrapy.Request(url=url, dont_filter = True)
 
     def parse(self, response):
         print(response.url)
         for record in response.css('div.search_result_item'):
-            item = RealEstateItem()
-            item['agent'] = self.name
+            try:
+                item = RealEstateItem()
+                item['agent'] = self.name
 
-            item['list_price'] = record.css('div.price_new > span.num::text').extract_first().replace(',', '')
-            item['name'] = record.css('span.item_title::text').extract_first()
-            item['sn'] = record.css('span.item_title').xpath('@title').extract_first().split(' - ')[-1]
-            item['url'] = record.css('div.search_result_item > a').xpath('@href').extract_first()
+                item['list_price'] = record.css('div.price_new > span.num::text').extract_first().replace(',', '')
+                item['name'] = record.css('span.item_title::text').extract_first()
+                item['sn'] = record.css('span.item_title').xpath('@title').extract_first().split(' - ')[-1]
+                item['url'] = record.css('div.search_result_item > a').xpath('@href').extract_first()
 
-            detail_line1 = record.css('div.detail_line1')
-            details = [v.strip() for v in detail_line1.css('span::text').extract()]
-            # XXX: Take care bad data.
-            details += [''] * max(0 ,(3 - len(details)))
-            item['address'], item['category'], item['parking_lot'] = \
-                details
-
-            detail_line2 = record.css('div.detail_line2')
-            if not item['category'] or len(detail_line2) < 2:
-                # 土地買賣
-                if not item['category']:
-                    item['category'] = '土地'
-            else:
-                # details = [v.strip() for v in detail_line2[0].css('span::text').extract()]
-                # print(details)
-                details = detail_line2[0].css('span.num::text').extract()
+                detail_line1 = record.css('div.detail_line1')
+                details = [v.strip() for v in detail_line1.css('span::text').extract()]
                 # XXX: Take care bad data.
-                details += [''] * max(0 ,(4 - len(details)))
-                item['building_ping'], item['main_ping'], item['age'], item['floor'] = \
+                details += [''] * max(0 ,(3 - len(details)))
+                item['address'], item['category'], item['parking_lot'] = \
                     details
-                layout = detail_line2[1].css('span.num::text').extract()
-                zipped = zip(layout, ['房', '廳', '衛', '室'])
-                # https://stackoverflow.com/a/3205524/9041712
-                item['layout'] = ''.join(sum(zipped, ()))
 
-            item['city_name'], item['area'] = re.findall(r'\w{3}', item['address'])[:2]
-            yield item
+                detail_line2 = record.css('div.detail_line2')
+                if not item['category'] or len(detail_line2) < 2:
+                    # 土地買賣
+                    if not item['category']:
+                        item['category'] = '土地'
+                else:
+                    # details = [v.strip() for v in detail_line2[0].css('span::text').extract()]
+                    details = detail_line2[0].css('span.num::text').extract()
+                    # XXX: Take care bad data.
+                    details += [''] * max(0 ,(4 - len(details)))
+                    item['building_ping'], item['main_ping'], item['age'], item['floor'] = \
+                        details
+                    layout = detail_line2[1].css('span.num::text').extract()
+                    zipped = zip(layout, ['房', '廳', '衛', '室'])
+                    # https://stackoverflow.com/a/3205524/9041712
+                    item['layout'] = ''.join(sum(zipped, ()))
+
+                loc = re.findall(r'\w+[鄉鎮市區]', item['address'])[0]
+                # Take care bad data.
+                item['city_name'], item['area'] = \
+                    (re.findall(r'\w{2,3}', loc) + [''])[:2]
+                yield item
+            except Exception as e:
+                logging.exception(response.url)
 
         # Notes: Take care paging.
         try:
