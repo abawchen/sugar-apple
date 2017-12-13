@@ -2,4 +2,8 @@
 *.pyc
 .scrapy/
 data/
+sugar/dist
+sugar/node_modules
+sugar/webpack.config.dev.js
+sugar/webpack.config.prod.js
 
