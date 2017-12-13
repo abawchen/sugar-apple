@@ -13,14 +13,14 @@ class SinyiSpider(scrapy.Spider):
     def start_requests(self):
         # XXX: Hardcode here.
         cities = [
-            # 'Taipei-city', 'NewTaipei-city', 'Taoyuan-city',
-            # 'Hsinchu-city', 'Hsinchu-county', 'Keelung-city',
-            # 'Taichung-city', 'Changhua-county', 'Miaoli-county',
-            # 'Nantou-county', 'Yunlin-county',
-            # 'Kaoshiung-city', 'Tainan-city', 'Chiayi-city',
-            # 'Chiayi-county', 'Pingtung-county',
-            # 'Yilan-county', 'Hualien-city', 'Taitung-county',
-            # 'Penghu-county', 'Kinmen-county'
+            'Taipei-city', 'NewTaipei-city', 'Taoyuan-city',
+            'Hsinchu-city', 'Hsinchu-county', 'Keelung-city',
+            'Taichung-city', 'Changhua-county', 'Miaoli-county',
+            'Nantou-county', 'Yunlin-county',
+            'Kaoshiung-city', 'Tainan-city', 'Chiayi-city',
+            'Chiayi-county', 'Pingtung-county',
+            'Yilan-county', 'Hualien-city', 'Taitung-county',
+            'Penghu-county', 'Kinmen-county'
             'Kinmen-county'
         ]
         for city in cities:
@@ -34,6 +34,8 @@ class SinyiSpider(scrapy.Spider):
 
             item['list_price'] = record.css('span.num::text').extract_first().replace(',', '')
             item['name'] = record.css('span.item_title::text').extract_first()
+            item['sn'] = record.css('span.item_title').xpath('@title').extract_first().split(' - ')[-1]
+            item['url'] = record.css('div.search_result_item > a').xpath('@href').extract_first()
 
             detail_line1 = record.css('div.detail_line1')
             details = [v.strip() for v in detail_line1.css('span::text').extract()]

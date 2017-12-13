@@ -40,6 +40,7 @@ class YungchingSpider(scrapy.Spider):
 
             description = record.css('div.item-description::text').extract_first()
             item['sn'], item['description'] = description.split('  ', maxsplit=1)
+            item['url'] = record.css('div.item-info > a').xpath('@href').extract_first()
 
             detail = record.css('ul.item-info-detail')
             details = [v.strip() for v in detail.css('li::text').extract()]
