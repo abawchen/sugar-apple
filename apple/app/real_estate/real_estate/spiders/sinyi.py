@@ -32,7 +32,7 @@ class SinyiSpider(scrapy.Spider):
             item = RealEstateItem()
             item['agent'] = self.name
 
-            item['list_price'] = record.css('span.num::text').extract_first().replace(',', '')
+            item['list_price'] = record.css('div.price_new > span.num::text').extract_first().replace(',', '')
             item['name'] = record.css('span.item_title::text').extract_first()
             item['sn'] = record.css('span.item_title').xpath('@title').extract_first().split(' - ')[-1]
             item['url'] = record.css('div.search_result_item > a').xpath('@href').extract_first()
