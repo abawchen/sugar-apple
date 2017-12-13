@@ -21,13 +21,16 @@ class SinyiSpider(scrapy.Spider):
             'Chiayi-county', 'Pingtung-county',
             'Yilan-county', 'Hualien-city', 'Taitung-county',
             'Penghu-county', 'Kinmen-county'
-            'Kinmen-county'
+            # 'Kinmen-county'
+            # 'NewTaipei-city'
+            # 'Pingtung-county'
         ]
         for city in cities:
             url = self.root_url + city + '/1.html'
             yield scrapy.Request(url=url, dont_filter = True)
 
     def parse(self, response):
+        print(response.url)
         for record in response.css('div.search_result_item'):
             item = RealEstateItem()
             item['agent'] = self.name
@@ -69,10 +72,8 @@ class SinyiSpider(scrapy.Spider):
         try:
             current_page = int(response.css('li.page.current::text').extract_first())
             last_page = int(response.css('li.page::text').extract()[-1])
-            if current_page == last_page:
-                return
-
-            next_page_url = re.sub('(\d+).html', str(current_page + 1) + '.html', response.url)
-            yield scrapy.Request(url=next_page_url)
+            if current_page != last_page:
+                next_page_url = re.sub('(\d+).html', str(current_page + 1) + '.html', response.url)
+                yield scrapy.Request(url=next_page_url)
         except Exception as e:
             pass

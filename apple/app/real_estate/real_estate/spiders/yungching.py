@@ -39,7 +39,8 @@ class YungchingSpider(scrapy.Spider):
             item['city_name'], item['area'] = re.findall(r'\w{3}', item['address'])[:2]
 
             description = record.css('div.item-description::text').extract_first()
-            item['sn'], item['description'] = description.split('  ', maxsplit=1)
+            # item['sn'], item['description'] = description.split('  ', maxsplit=1)
+            item['sn'], _ = description.split('  ', maxsplit=1)
             item['url'] = record.css('div.item-info > a').xpath('@href').extract_first()
 
             detail = record.css('ul.item-info-detail')
@@ -58,9 +59,7 @@ class YungchingSpider(scrapy.Spider):
             current_page = int(re.findall('pg=(\d+)', response.url)[0])
             disabled = response.css('li.disabled')
             if disabled and disabled.css('a::text').extract_first() == '下一頁 >':
-                return
-
-            next_page_url = re.sub('pg=(\d+)', 'pg=' + str(current_page + 1), response.url)
-            yield scrapy.Request(url=next_page_url)
+                next_page_url = re.sub('pg=(\d+)', 'pg=' + str(current_page + 1), response.url)
+                yield scrapy.Request(url=next_page_url)
         except Exception as e:
             pass
