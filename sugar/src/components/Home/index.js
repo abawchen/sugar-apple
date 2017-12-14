@@ -1,12 +1,9 @@
 import React from 'react';
-import { Switch, Route, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-
-import Home from '../Home';
 
 @inject('stores')
 @observer
-export default class App extends React.Component {
+export default class Home extends React.Component {
   constructor (props) {
     super(props);
   }
@@ -16,9 +13,7 @@ export default class App extends React.Component {
 
     return (
       <div>
-        <Switch>
-          <Route exact path="/" component={Home}/>
-        </Switch>
+        Home
       </div>
     );
   }
