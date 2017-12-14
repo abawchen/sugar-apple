@@ -11,28 +11,41 @@ class SinyiSpider(scrapy.Spider):
     allowed_domains = ['buy.sinyi.com.tw']
     root_url = 'http://buy.sinyi.com.tw/list/'
     # http://buy.sinyi.com.tw/list/Taipei-city/index.html
+
+    # Sample command:
+    # scrapy crawl sinyi \
+    #   -o json/20171214-sinyi-taipei.json \
+    #   -a city='Taipei-city' \
+    #   --logfile=20171214-sinyi-taipei.log \
+    #   --loglevel=ERROR
+    def __init__(self, category=None, *args, **kwargs):
+        super(SinyiSpider, self).__init__(*args, **kwargs)
+
     def start_requests(self):
-        # XXX: Hardcode here.
-        cities = [
-            # 'Taipei-city', 'NewTaipei-city', 'Taoyuan-city',
-            # 'Hsinchu-city', 'Hsinchu-county', 'Keelung-city',
-            # 'Taichung-city', 'Changhua-county', 'Miaoli-county',
-            # 'Nantou-county', 'Yunlin-county',
-            # 'Kaoshiung-city', 'Tainan-city', 'Chiayi-city',
-            # 'Chiayi-county', 'Pingtung-county',
-            # 'Yilan-county', 'Hualien-city', 'Taitung-county',
-            # 'Penghu-county', 'Kinmen-county'
-            'Taichung-city'
-            # 'Kaoshiung-city'
-            # 'Kinmen-county'
-            # 'NewTaipei-city'
-            # 'Pingtung-county'
-        ]
-        for city in cities:
-            url = self.root_url + city + '/1.html'
-            yield scrapy.Request(url=url, dont_filter = True)
-        # url = 'http://buy.sinyi.com.tw/list/Changhua-county/3.html'
-        # yield scrapy.Request(url=url, dont_filter = True)
+        url = self.root_url + self.city + '/1.html'
+        yield scrapy.Request(url=url, dont_filter = True)
+        # Following code will lead scrapy to stop with no reason,
+        # that I separate cities to luigi task level.
+        # # XXX: Hardcode here.
+        # cities = [
+        #     'Taipei-city', 'NewTaipei-city', 'Taoyuan-city',
+        #     'Hsinchu-city', 'Hsinchu-county', 'Keelung-city',
+        #     'Taichung-city', 'Changhua-county', 'Miaoli-county',
+        #     'Nantou-county', 'Yunlin-county',
+        #     'Kaoshiung-city', 'Tainan-city', 'Chiayi-city',
+        #     'Chiayi-county', 'Pingtung-county',
+        #     'Yilan-county', 'Hualien-city', 'Taitung-county',
+        #     'Penghu-county', 'Kinmen-county'
+        #     'Taoyuan-city',
+        #     'Taichung-city'
+        #     'Kaoshiung-city'
+        #     'Kinmen-county'
+        #     'NewTaipei-city'
+        #     'Pingtung-county'
+        # ]
+        # for city in cities:
+        #     url = self.root_url + city + '/1.html'
+        #     yield scrapy.Request(url=url, dont_filter = True)
 
     def parse(self, response):
         print(response.url)
