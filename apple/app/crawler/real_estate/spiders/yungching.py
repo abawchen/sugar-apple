@@ -59,7 +59,8 @@ class YungchingSpider(scrapy.Spider):
             current_page = int(re.findall('pg=(\d+)', response.url)[0])
             disabled = response.css('li.disabled')
             if disabled and disabled.css('a::text').extract_first() == '下一頁 >':
-                next_page_url = re.sub('pg=(\d+)', 'pg=' + str(current_page + 1), response.url)
-                yield scrapy.Request(url=next_page_url)
+                return
+            next_page_url = re.sub('pg=(\d+)', 'pg=' + str(current_page + 1), response.url)
+            yield scrapy.Request(url=next_page_url)
         except Exception as e:
             pass
