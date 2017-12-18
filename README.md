@@ -4,7 +4,9 @@
 
 - Backend
     - [ ] Data query api by graphQL
-    - [ ] Integrate with more meta / real estate data
+    - [ ] Integration with more meta / real estate data 
+      - [x] Crawler task (refer to [crawler](https://github.com/abawchen/sugar-apple/wiki/Cralwer))
+      - [ ] Data integration 
     - [ ] Find out the bargaining space
 - Frontend(Web)
     - [ ] Friendly ui query
