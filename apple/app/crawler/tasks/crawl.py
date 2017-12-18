@@ -6,6 +6,11 @@ import subprocess
 
 import luigi
 
+
+def createFolderIfNotExist(path):
+     if not os.path.exists(path):
+        os.makedirs(path)
+
 class SinyiCrawlCityTask(luigi.Task):
     """
     PYTHONPATH=. luigi --module tasks.crawl SinyiCrawlCityTask --local-scheduler --city Taipei-city
@@ -16,7 +21,7 @@ class SinyiCrawlCityTask(luigi.Task):
 
     def output(self):
         output_path = os.path.join(
-            "data", str(self.date), "{}-sinyi-{}.jsonl".format(self.date, self.city))
+            "data", str(self.date), "{}-sinyi-{}.jsonl".format(self.date, self.city.lower()))
         return luigi.LocalTarget(output_path)
 
     def run(self):
@@ -30,6 +35,7 @@ class SinyiCrawlCityTask(luigi.Task):
             "--loglevel", "ERROR"
         ]
         subprocess.check_output(command)
+        createFolderIfNotExist(os.path.join("data", str(self.date)))
         os.rename(tmp_output_path, self.output().path)
 
 
@@ -78,6 +84,7 @@ class YungchingCrawlTask(luigi.Task):
         ]
         print(' '.join(command))
         subprocess.check_output(command)
+        createFolderIfNotExist(os.path.join("data", str(self.date)))
         os.rename(tmp_output_path, self.output().path)
 
 
@@ -90,8 +97,7 @@ class AgentCrawlTask(luigi.WrapperTask):
 
     def requires(self):
         path = os.path.join("data", str(self.date))
-        if not os.path.exists(path):
-            os.makedirs(path)
+        createFolderIfNotExist(path)
 
         yield SinyiCrawlTask(self.date)
         yield YungchingCrawlTask(self.date)
