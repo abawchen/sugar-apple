@@ -12,7 +12,7 @@
 
 ### apple (backend)
 
-On the terminal, create a new virtual python environment by [virtualenvwrapper](https://virtualenvwrapper.readthedocs.io/en/latest/):
+On the terminal, create a new virtual python environment by [virtualenvwrapper](https://virtualenvwrapper.readthedocs.io/en/latest/), or refer [cheatsheet](https://github.com/abawchen/sugar-apple/wiki#cheatsheet) for more detail:
 ```shell
 $ mkvirtualenv --python=$(which python3.5) venv
 ```
