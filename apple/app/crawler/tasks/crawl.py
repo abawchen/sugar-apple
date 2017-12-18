@@ -89,6 +89,10 @@ class AgentCrawlTask(luigi.WrapperTask):
     date = luigi.DateParameter(default=datetime.date.today())
 
     def requires(self):
+        path = os.path.join("data", str(self.date))
+        if not os.path.exists(path):
+            os.makedirs(path)
+
         yield SinyiCrawlTask(self.date)
         yield YungchingCrawlTask(self.date)
 
