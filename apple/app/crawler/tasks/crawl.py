@@ -31,7 +31,7 @@ class SinyiCrawlCityTask(luigi.Task):
             "-a", "city={}".format(self.city),
             "-o", tmp_output_path,
             "-t", "jl",
-            "--logfile", "{}-sinyi-{}.log".format(self.date, self.city.lower()),
+            "--logfile", os.path.join(".tmpdata", str(self.date), "{}-sinyi-{}.log".format(self.date, self.city.lower())),
             "--loglevel", "ERROR"
         ]
         subprocess.check_output(command)
@@ -80,6 +80,7 @@ class YungchingCrawlTask(luigi.Task):
             "-o", tmp_output_path,
             "-t", "jl",
             "--logfile", "{}-yungching.log".format(self.date),
+            "--logfile", os.path.join(".tmpdata", str(self.date), "{}-yungching.log".format(self.date)),
             "--loglevel", "ERROR"
         ]
         print(' '.join(command))
