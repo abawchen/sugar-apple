@@ -3,6 +3,8 @@ import { create } from "jss";
 import preset from "jss-preset-default";
 import JssProvider from "react-jss/lib/JssProvider";
 import createGenerateClassName from "material-ui/styles/createGenerateClassName";
+import { ThemeProvider, injectGlobal } from 'styled-components'
+import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import { Switch, Route, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 
@@ -11,6 +13,35 @@ import Home from '../Home';
 const jss = create(preset());
 jss.options.createGenerateClassName = createGenerateClassName;
 jss.options.insertionPoint = "insertion-point-jss";
+
+const fontFamily = 'Roboto, Helvetica, "Noto Sans TC", "Microsoft JhengHei", sans-serif';
+
+injectGlobal`
+  * {
+    box-sizing: border-box;
+    position: relative;
+  }
+
+  html {
+    font-family: ${fontFamily};
+    font-size: 16px;
+    height: 100%;
+  }
+
+  body {
+    min-height: 100%;
+  }
+`
+
+const appTheme = {
+
+};
+
+const muiTheme = createMuiTheme({
+  typography: {
+    fontFamily,
+  },
+});
 
 @inject('stores')
 @observer
@@ -24,9 +55,13 @@ export default class App extends React.Component {
 
     return (
       <JssProvider jss={jss}>
-        <Switch>
-          <Route exact path="/" component={Home}/>
-        </Switch>
+        <ThemeProvider theme={appTheme}>
+          <MuiThemeProvider theme={muiTheme}>
+            <Switch>
+              <Route exact path="/" component={Home}/>
+            </Switch>
+          </MuiThemeProvider>
+        </ThemeProvider>
       </JssProvider>
     );
   }
