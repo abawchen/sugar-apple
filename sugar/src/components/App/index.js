@@ -8,6 +8,7 @@ import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import { Switch, Route, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 
+import Header from '../Header';
 import Home from '../Home';
 
 const jss = create(preset());
@@ -34,7 +35,11 @@ injectGlobal`
 `
 
 const appTheme = {
-
+  // Dimension
+  headerHeight: '4rem',
+  // Color
+  primary: '#39528b',
+  secondary: '#ef4b4c',
 };
 
 const muiTheme = createMuiTheme({
@@ -57,6 +62,7 @@ export default class App extends React.Component {
       <JssProvider jss={jss}>
         <ThemeProvider theme={appTheme}>
           <MuiThemeProvider theme={muiTheme}>
+            <Header/>
             <Switch>
               <Route exact path="/" component={Home}/>
             </Switch>
