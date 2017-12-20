@@ -2,8 +2,8 @@
 
 from flask import Flask
 from flask_graphql import GraphQLView
-from .db import db_session
-from .models.schema import schema
+from .sql.db import db_session
+from .sql.models.schema import schema
 
 
 # https://spacewander.github.io/explore-flask-zh/5-configuration.html

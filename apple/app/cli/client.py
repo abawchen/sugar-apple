@@ -12,10 +12,10 @@ import zipfile
 from glob import glob
 from tqdm import tqdm
 
-from .. import db
 from ..config import DATA_DIR
 from ..file import normalize, readline
-from ..models import City, Record
+from ..sql import db
+from ..sql.models import City, Record
 
 
 class AppleClient(object):
@@ -110,6 +110,8 @@ class AppleClient(object):
     @click.argument('format', default='TXT')
     @click.argument('path', default=os.path.join(DATA_DIR, 'lvr_landtxt_utf8_normalize'))
     def persist(format, path):
+        db.clear(City)
+        db.clear(Record)
         city_file = glob(os.path.join(path, '[0-9]' * 8 + '.' + format))
         with open(city_file[0], 'r') as f:
             city_mapping = [s.split(',') for s in re.findall('[A-Z],.*', f.read())]
