@@ -8,10 +8,9 @@ import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import { Switch, Route, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 
-import Header from '../Header';
-import Footer from '../Footer';
-import Main from '../Main';
-import Home from '../Home';
+import Header from '../../components/Header';
+import Footer from '../../components/Footer';
+import HomePage from '../HomePage';
 
 const jss = create(preset());
 jss.options.createGenerateClassName = createGenerateClassName;
@@ -72,11 +71,9 @@ export default class App extends React.Component {
         <ThemeProvider theme={appTheme}>
           <MuiThemeProvider theme={muiTheme}>
             <Header/>
-            <Main>
             <Switch>
-              <Route exact path="/" component={Home}/>
+              <Route exact path="/" component={HomePage}/>
             </Switch>
-            </Main>
             <Footer/>
           </MuiThemeProvider>
         </ThemeProvider>

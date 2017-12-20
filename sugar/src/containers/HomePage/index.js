@@ -1,9 +1,13 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
+import styled, { withTheme } from 'styled-components';
+
+import Main from '../../components/Main';
 
 @inject('stores')
 @observer
-export default class Home extends React.Component {
+@withTheme
+export default class HomePage extends React.Component {
   constructor (props) {
     super(props);
   }
@@ -12,9 +16,9 @@ export default class Home extends React.Component {
     let { stores } = this.props;
 
     return (
-      <div>
+      <Main>
         Home
-      </div>
+      </Main>
     );
   }
 }
