@@ -10,6 +10,7 @@ import { inject, observer } from 'mobx-react';
 
 import Header from '../Header';
 import Footer from '../Footer';
+import Main from '../Main';
 import Home from '../Home';
 
 const jss = create(preset());
@@ -32,6 +33,13 @@ injectGlobal`
 
   body {
     min-height: 100%;
+    display: flex;
+  }
+
+  #root {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
   }
 `
 
@@ -64,9 +72,11 @@ export default class App extends React.Component {
         <ThemeProvider theme={appTheme}>
           <MuiThemeProvider theme={muiTheme}>
             <Header/>
+            <Main>
             <Switch>
               <Route exact path="/" component={Home}/>
             </Switch>
+            </Main>
             <Footer/>
           </MuiThemeProvider>
         </ThemeProvider>
