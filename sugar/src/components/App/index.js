@@ -9,6 +9,7 @@ import { Switch, Route, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 
 import Header from '../Header';
+import Footer from '../Footer';
 import Home from '../Home';
 
 const jss = create(preset());
@@ -66,6 +67,7 @@ export default class App extends React.Component {
             <Switch>
               <Route exact path="/" component={Home}/>
             </Switch>
+            <Footer/>
           </MuiThemeProvider>
         </ThemeProvider>
       </JssProvider>
