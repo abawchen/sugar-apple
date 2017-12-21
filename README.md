@@ -4,9 +4,9 @@
 
 - Backend
     - [ ] Data query api by graphQL
-    - [ ] Integration with more meta / real estate data 
+    - [ ] Integration with more meta / real estate data
       - [x] Crawler task (refer to [crawler](https://github.com/abawchen/sugar-apple/wiki/Cralwer))
-      - [ ] Data integration 
+      - [ ] Data integration
     - [ ] Find out the bargaining space
 - Frontend(Web)
     - [ ] Friendly ui query
@@ -25,12 +25,20 @@ $ cd apple
 $ pip install -r requirements.txt
 ```
 
-Create `apple/app/instance/config.py` for `SQLALCHEMY_DATABASE_URI`, and you have to setup the corresponding database at the same time, sample config as:
+Create `apple/app/instance/config.py`, and you can use either mysql or mongo whatever you like:
+For mysql, by setting `SQLALCHEMY_DATABASE_URI`:
+
 ```
 SQLALCHEMY_DATABASE_URI = 'mysql+mysqldb://root:password@127.0.0.1:3306/sugar-apple'
 ```
 
-[Experimental] Install the interactive sugar-apple backend cli (called apple):
+For mongo, by setting `MONGO_DATABASE_URI`:
+
+```
+MONGO_DATABASE_URI = 'mongodb://localhost:27017'
+```
+
+Install the interactive sugar-apple backend cli:
 ```shell
 $ pip install --editable .
 ```
@@ -44,7 +52,8 @@ apple> apple download
 apple> apple unzip
 apple> apple transcode
 apple> apple normalize
-apple> apple persist
+apple> apple persist -d mysql # for mysql
+apple> apple persist -d mongo # for mongo
 apple> exit
 ```
 
@@ -55,6 +64,7 @@ $ export FLASK_APP=app/app.py && flask run -p 5001
 
 Then you can visit `http://127.0.0.1:5001/graphql` to test graphql
 
+---
 ### sugar (frontend)
 
 Install dependencies:
