@@ -2,7 +2,7 @@
 
 from prompt_toolkit.completion import Completer
 
-from .completions import SUBCOMMANDS
+from .completions import ARGS_OPTS_LOOKUP, SUBCOMMANDS
 
 
 class Completer(Completer):

@@ -12,10 +12,12 @@ import zipfile
 from glob import glob
 from tqdm import tqdm
 
-from .. import db
 from ..config import DATA_DIR
 from ..file import normalize, readline
-from ..models import City, Record
+from ..mysql import db as mysql
+from ..mysql import models as mysqlmodels
+from ..mongo import db as mongo
+from ..mongo import models as mongomodels
 
 
 class AppleClient(object):
@@ -104,34 +106,52 @@ class AppleClient(object):
 
     @cli.command()
     def initdb():
-        db.init()
+        mysql.init()
 
     @cli.command()
     @click.argument('format', default='TXT')
     @click.argument('path', default=os.path.join(DATA_DIR, 'lvr_landtxt_utf8_normalize'))
-    def persist(format, path):
+    @click.option('-d', '--dialect', default='mysql')
+    def persist(format, path, dialect):
         city_file = glob(os.path.join(path, '[0-9]' * 8 + '.' + format))
         with open(city_file[0], 'r') as f:
             city_mapping = [s.split(',') for s in re.findall('[A-Z],.*', f.read())]
-        db.persist(City, city_mapping, 'replace')
-        db.add_primary_key(City)
-
-        # Persist record to db
         record_files = glob(os.path.join(path, '[A-Z]*[ABC].TXT'))
         pbar = tqdm(record_files)
-        for filename in pbar:
-            trading_type = re.match('.*([ABC]).TXT', filename).group(1)
-            city_code = re.match('.*/([A-Z])', filename).group(1)
-            city_name = next((name for (code, name) in city_mapping if code == city_code), None)
-            meta = [trading_type, city_code, city_name, "0", "0", ]
-            with open(filename, 'r') as f:
-                data = f.readlines()
-                data = [data[0]] + [",".join(meta + [line]) for line in data[1:]]
-                # TODO: Grep error data
-                data = [d.split(',') for d in data[1:] if d.count(',') == 32]
-                db.persist(Record, data, 'append')
-                pbar.set_description("Processing %s" % filename)
-        db.add_primary_key(Record)
+
+        if dialect == 'mysql':
+            mysql.clear(mysqlmodels.City)
+            mysql.clear(mysqlmodels.Record)
+            mysql.persist(mysqlmodels.City, city_mapping, 'replace')
+            mysql.add_primary_key(mysqlmodels.City)
+            # Persist record to db
+            for filename in pbar:
+                trading_type = re.match('.*([ABC]).TXT', filename).group(1)
+                city_code = re.match('.*/([A-Z])', filename).group(1)
+                city_name = next((name for (code, name) in city_mapping if code == city_code), None)
+                meta = [trading_type, city_code, city_name, "0", "0", ]
+                with open(filename, 'r') as f:
+                    records = f.readlines()
+                    records = [records[0]] + [",".join(meta + [line]) for line in records[1:]]
+                    # TODO: Grep error records
+                    records = [d.split(',') for d in records[1:] if d.count(',') == 32]
+                    mysql.persist(mysqlmodels.Record, records, 'append')
+                    pbar.set_description("Processing %s" % filename)
+            mysql.add_primary_key(mysqlmodels.Record)
+        else:
+            for filename in pbar:
+                trading_type = re.match('.*([ABC]).TXT', filename).group(1)
+                city_code = re.match('.*/([A-Z])', filename).group(1)
+                city_name = next((name for (code, name) in city_mapping if code == city_code), None)
+                meta = [trading_type, city_code, city_name, "0", "0", ]
+                with open(filename, 'r') as f:
+                    data = f.readlines()
+                    data = [data[0]] + [",".join(meta + [line]) for line in data[1:]]
+                    # TODO: Grep error data
+                    data = [d.split(',') for d in data[1:] if d.count(',') == 32]
+                    mongo.persist(mongomodels.Record, data)
+                    pbar.set_description("Processing %s" % filename)
+
 
     @cli.command()
     def startserver():
