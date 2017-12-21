@@ -12,6 +12,7 @@
     - [ ] Friendly ui query
     - [ ] Data visualization
 
+---
 ### apple (backend)
 
 On the terminal, create a new virtual python environment by [virtualenvwrapper](https://virtualenvwrapper.readthedocs.io/en/latest/), or refer [cheatsheet](https://github.com/abawchen/sugar-apple/wiki#cheatsheet) for more detail:
@@ -62,7 +63,7 @@ Start flask server:
 $ export FLASK_APP=app/app.py && flask run -p 5001
 ```
 
-Then you can visit `http://127.0.0.1:5001/graphql` to test graphql
+Then you can visit `http://127.0.0.1:5001/graphql-mysql` with mysql, or `http://127.0.0.1:5001/graphql-mongo` with mongo.
 
 ---
 ### sugar (frontend)
