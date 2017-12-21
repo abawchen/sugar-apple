@@ -4,7 +4,6 @@
 import graphene
 from graphene_sqlalchemy import SQLAlchemyConnectionField, SQLAlchemyObjectType
 from . import City, Record
-from ..db import db_session
 
 class CityType(SQLAlchemyObjectType):
 
@@ -29,7 +28,7 @@ class Query(graphene.ObjectType):
         city_name=graphene.String(),
         area=graphene.String()
     )
-    # all_records = SQLAlchemyConnectionField(RecordType)
+    all_records = SQLAlchemyConnectionField(RecordType)
 
     def resolve_record(self, info, **args):
         id = args.get('id')
@@ -38,7 +37,10 @@ class Query(graphene.ObjectType):
     def resolve_records(self, info, **args):
         limit = args.pop('limit', 0)
         offset = args.pop('offset', 0)
-        query = RecordType.get_query(info).filter_by(**args)
+        query = RecordType \
+            .get_query(info) \
+            .filter_by(**args) \
+            .order_by(Record.id)
         # TODO: Refactor
         if limit:
             query = query.limit(limit)
