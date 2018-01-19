@@ -39,8 +39,8 @@ class AppleClient(object):
     def download(format, path):
         # TODO: Replace hardcode
         mapping = {
-            'txt': 'http://data.moi.gov.tw/MoiOD/System/DownloadFile.aspx?DATA=3E2D5B42-7CA1-405D-9C87-D98D3BA19AAB',
-            'csv': 'http://data.moi.gov.tw/MoiOD/System/DownloadFile.aspx?DATA=F0199ED0-184A-40D5-9506-95138F54159A'
+            'txt': 'http://plvr.land.moi.gov.tw//Download?type=zip&fileName=lvr_landtxt.zip',
+            'csv': 'http://plvr.land.moi.gov.tw//Download?type=zip&fileName=lvr_landcsv.zip'
         }
         r = requests.get(mapping[format], stream=True)
 

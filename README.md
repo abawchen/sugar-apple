@@ -41,7 +41,7 @@ MONGO_DATABASE_URI = 'mongodb://localhost:27017'
 
 Install the interactive sugar-apple backend cli:
 ```shell
-$ pip install --editable .
+$ cd apple && pip install --editable .
 ```
 
 Use cli to persist data to database:
