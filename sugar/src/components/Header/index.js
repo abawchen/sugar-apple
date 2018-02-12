@@ -10,7 +10,7 @@ export default class Header extends React.Component {
   render () {
     return (
       <StyledHeader>
-        <Logo>SUGAR <span>APPLE</span></Logo>
+        <Logo>SUGAR APPLE</Logo>
       </StyledHeader>
     );
   }
@@ -19,19 +19,19 @@ export default class Header extends React.Component {
 const StyledHeader = styled.header`
   width: 100%;
   height: ${props => props.theme.headerHeight};
-  border-bottom: 1px solid #eeeeee;
+  background-color: rgba(0, 0, 0, .1);
   padding: 0 1rem;
+  left: 0px;
+  top: 0px;
+  position: absolute;
   display: flex;
   align-items: center;
+  z-index: 1;
 `;
 
 const Logo = styled.div`
-  font-size: 2rem;
-  font-weight: 600;
-  color: ${props => props.theme.primary};
-  text-shadow: 2px 2px #e0e0e0;
-
-  > span {
-    color: ${props => props.theme.secondary};
-  }
+  font-size: 1.25rem;
+  color: #ffffff;
+  border: 1px solid #ffffff20;
+  padding: .5rem 1rem;
 `;

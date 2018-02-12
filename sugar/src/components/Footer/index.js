@@ -19,9 +19,9 @@ export default class Footer extends React.Component {
 const StyledFooter = styled.footer`
   font-size: .8rem;
   color: #ffffff;
-  background-color: ${props => props.theme.primary};
+  background-color: ${props => props.theme.secondary};
   width: 100%;
-  padding: 2rem 1rem;
+  padding: 1.5rem 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;

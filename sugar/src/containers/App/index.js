@@ -47,7 +47,8 @@ const appTheme = {
   headerHeight: '4rem',
   // Color
   primary: '#39528b',
-  secondary: '#ef4b4c',
+  secondary: '#1b313f',
+  accent: '#ef4b4c',
 };
 
 const muiTheme = createMuiTheme({
