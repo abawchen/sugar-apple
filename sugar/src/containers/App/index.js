@@ -60,10 +60,6 @@ const muiTheme = createMuiTheme({
 @inject('stores')
 @observer
 export default class App extends React.Component {
-  constructor (props) {
-    super(props);
-  }
-
   render () {
     let { stores } = this.props;
 

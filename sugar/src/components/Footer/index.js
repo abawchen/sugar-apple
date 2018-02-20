@@ -3,10 +3,6 @@ import styled, { withTheme } from 'styled-components';
 
 @withTheme
 export default class Footer extends React.Component {
-  constructor (props) {
-    super(props);
-  }
-
   render () {
     return (
       <StyledFooter>

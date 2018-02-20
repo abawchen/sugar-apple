@@ -8,10 +8,6 @@ import Main from '../../components/Main';
 @observer
 @withTheme
 export default class HomePage extends React.Component {
-  constructor (props) {
-    super(props);
-  }
-
   render () {
     let { stores } = this.props;
 
