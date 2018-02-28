@@ -1,21 +1,11 @@
 import React from 'react';
-import { create } from "jss";
-import preset from "jss-preset-default";
-import JssProvider from "react-jss/lib/JssProvider";
-import createGenerateClassName from "material-ui/styles/createGenerateClassName";
 import { ThemeProvider, injectGlobal } from 'styled-components'
-import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import { Switch, Route, Link } from 'react-router-dom';
 
+import Wrapper from '../../components/Wrapper';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import HomePage from '../HomePage';
-
-const jss = create(preset());
-jss.options.createGenerateClassName = createGenerateClassName;
-jss.options.insertionPoint = "insertion-point-jss";
-
-const fontFamily = 'Roboto, Helvetica, "Noto Sans TC", "Microsoft JhengHei", sans-serif';
 
 injectGlobal`
   * {
@@ -24,7 +14,7 @@ injectGlobal`
   }
 
   html {
-    font-family: ${fontFamily};
+    font-family: Roboto, Helvetica, "Noto Sans TC", "Microsoft JhengHei", sans-serif;
     font-size: 16px;
     height: 100%;
   }
@@ -42,7 +32,7 @@ injectGlobal`
     flex: 1 1 auto;
     flex-direction: column;
   }
-`
+`;
 
 const appTheme = {
   // Dimension
@@ -59,26 +49,18 @@ const appTheme = {
   dark: '#212121',
 };
 
-const muiTheme = createMuiTheme({
-  typography: {
-    fontFamily,
-  },
-});
-
 export default class App extends React.Component {
   render () {
     return (
-      <JssProvider jss={jss}>
-        <ThemeProvider theme={appTheme}>
-          <MuiThemeProvider theme={muiTheme}>
-            <Header/>
-            <Switch>
-              <Route exact path="/" component={HomePage}/>
-            </Switch>
-            <Footer/>
-          </MuiThemeProvider>
-        </ThemeProvider>
-      </JssProvider>
+      <ThemeProvider theme={appTheme}>
+        <Wrapper>
+          <Header/>
+          <Switch>
+            <Route exact path="/" component={HomePage}/>
+          </Switch>
+          <Footer/>
+        </Wrapper>
+      </ThemeProvider>
     );
   }
 }
