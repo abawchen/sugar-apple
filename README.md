@@ -86,15 +86,15 @@ $ cp webpack.config.example.js webpack.config.prod.js
 Output bundle:
 ```bash
 # for development
-$ npm run build:dev
+$ yarn run build:dev
 
 # for production
-$ npm run build
+$ yarn run build
 ```
 
 Start dev server:
 ```bash
-$ npm start
+$ yarn start
 ```
 Now the client app is running at `http://{webpackDevServerHost}:{webpackdevServerPort}`
 
