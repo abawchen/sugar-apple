@@ -1,3 +1,7 @@
+import SearchStore from './search';
+
 export default class Stores {
-  constructor() {}
+  constructor() {
+    this.searchStore = new SearchStore(this);
+  }
 }

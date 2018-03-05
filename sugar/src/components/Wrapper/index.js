@@ -2,7 +2,7 @@ import React from 'react';
 import styled, { withTheme } from 'styled-components';
 
 @withTheme
-export default class Main extends React.Component {
+export default class Wrapper extends React.Component {
   render () {
     return (
       <StyledMain>
@@ -12,7 +12,8 @@ export default class Main extends React.Component {
   }
 }
 
-const StyledMain = styled.main`
+const StyledMain = styled.div`
+  background-color: ${props => props.theme.primaryDarker};
   width: 100%;
   display: flex;
   flex: 1 1 auto;

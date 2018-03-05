@@ -5,7 +5,7 @@ import { AppContainer } from 'react-hot-loader';
 import { Router, Route } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 import Stores from './stores';
-import App from './components/App';
+import App from './containers/App';
 
 const stores = new Stores();
 const history = createBrowserHistory();
@@ -26,7 +26,7 @@ const render = Component => {
 render(App);
 
 if (module.hot) {
-  module.hot.accept('./components/App', () => {
+  module.hot.accept('./containers/App', () => {
     render(App);
   });
 }

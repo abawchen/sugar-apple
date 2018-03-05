@@ -1,37 +1,32 @@
 import React from 'react';
 import styled, { withTheme } from 'styled-components';
 
+import Container from '../../components/Container';
+import Logo from '../Logo';
+
 @withTheme
 export default class Header extends React.Component {
-  constructor (props) {
-    super(props);
-  }
-
   render () {
     return (
       <StyledHeader>
-        <Logo>SUGAR <span>APPLE</span></Logo>
+        <Container>
+          <Logo/>
+        </Container>
       </StyledHeader>
     );
   }
 }
 
 const StyledHeader = styled.header`
+  font-size: 1.25rem;
+  color: ${props => props.theme.light};
   width: 100%;
   height: ${props => props.theme.headerHeight};
-  border-bottom: 1px solid #eeeeee;
   padding: 0 1rem;
+  left: 0px;
+  top: 0px;
+  position: absolute;
   display: flex;
   align-items: center;
-`;
-
-const Logo = styled.div`
-  font-size: 2rem;
-  font-weight: 600;
-  color: ${props => props.theme.primary};
-  text-shadow: 2px 2px #e0e0e0;
-
-  > span {
-    color: ${props => props.theme.secondary};
-  }
+  z-index: 1;
 `;
